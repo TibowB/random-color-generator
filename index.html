@@ -18,7 +18,6 @@
         <input type="text" v-model="colorRGBA" id="rgba" readonly />
         <button @click="copyRGBAToClipBoard" class="copy">COPY</button>
         <input type="text" v-model="colorHEX" id="hex" readonly />
-
         <button @click="copyHEXToClipBoard" class="copy">COPY</button>
       </div>
 
@@ -82,12 +81,12 @@
         },
         copyHEXToClipBoard() {
           this.copyTextFromInput('hex')
+          this.showMessage()
         },
         copyTextFromInput(inputId) {
           let input = document.getElementById(inputId)
           input.select()
           document.execCommand('copy')
-          this.showMessage()
         },
         showMessage() {
           this.isCopied = true
