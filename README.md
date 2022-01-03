@@ -6,4 +6,4 @@ Then I convert this value to a HEX color code.
 
 ### How to use the app ?
 
-Open the **index.html** file in your browser and that's it!
+Open the **index.html** file in your browser.
