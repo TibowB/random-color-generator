@@ -145,7 +145,7 @@ input[type='text'] {
           this.showMessage()
         },
         copyTextFromInput(inputId) {
-          let input = document.getElementById(inputId)
+          const input = document.getElementById(inputId)
           input.select()
           document.execCommand('copy')
         },
@@ -158,12 +158,12 @@ input[type='text'] {
       },
       computed: {
         colorRGBA() {
-          return (this.rgba = `rgba(${this.r}, ${this.g}, ${this.b}, 1)`)
+          return `rgba(${this.r}, ${this.g}, ${this.b}, 1)`
         },
         colorHEX() {
-          let hexR = this.convertDecimalNumberToHexNumber(this.r)
-          let hexG = this.convertDecimalNumberToHexNumber(this.g)
-          let hexB = this.convertDecimalNumberToHexNumber(this.b)
+          const hexR = this.convertDecimalNumberToHexNumber(this.r)
+          const hexG = this.convertDecimalNumberToHexNumber(this.g)
+          const hexB = this.convertDecimalNumberToHexNumber(this.b)
           return '#' + hexR + hexG + hexB
         },
       },
