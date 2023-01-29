@@ -1,174 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://unpkg.com/vue@next"></script>
-    <link rel="stylesheet" href="./style.min.css" />
-    <title>Random Color Generator</title>
-    <style>
-      *,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
-html {
-  font-family: 'Monserrat', sans-serif;
-  background: #fff5f5;
-}
-
-#app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.generate {
-  margin: 5em 0;
-  padding: 2em 3em;
-}
-
-.generate,
-.copy {
-  border-radius: 10px;
-  background-color: transparent;
-  border: 2px #000 solid;
-  box-shadow: #000 1px 2px 4px;
-}
-
-.generate:hover,
-.copy:hover {
-  box-shadow: none;
-}
-
-.inputs {
-  display: inherit;
-  margin-bottom: 2em;
-}
-
-input[type='text'] {
-  height: 2em;
-  text-align: center;
-  margin: 1em 1em;
-}
-.copy {
-  padding: 1em;
-}
-.color {
-  height: 20em;
-  width: 20em;
-  border-radius: 50%;
-}
-.message {
-  margin-top: 1em;
-  font-size: 0.8em;
-}
-    </style>
-  </head>
-  <body>
-    <div id="app">
-      <button @click="generateRandomColor" class="generate">
-        GENERATE RANDOM COLOR
-      </button>
-
-      <div class="inputs">
-        <input type="text" v-model="colorRGBA" id="rgba" readonly />
-        <button @click="copyRGBAToClipBoard" class="copy">COPY</button>
-        <input type="text" v-model="colorHEX" id="hex" readonly />
-        <button @click="copyHEXToClipBoard" class="copy">COPY</button>
-      </div>
-
-      <div class="color" :style="{backgroundColor: colorRGBA}"></div>
-      <p v-if="isCopied" class="message">Successfully added to clipboard!</p>
-    </div>
-  </body>
-  <script>
-    const App = {
-      data() {
-        return {
-          r: 0,
-          g: 0,
-          b: 0,
-          rgba: '',
-          message: '',
-          isCopied: false,
-        }
-      },
-      created() {},
-      methods: {
-        generateRandomColor() {
-          this.r = this.generateRandomNumberBetweenTwoValues(0, 256)
-          this.g = this.generateRandomNumberBetweenTwoValues(0, 256)
-          this.b = this.generateRandomNumberBetweenTwoValues(0, 256)
-        },
-        generateRandomNumberBetweenTwoValues(min, max) {
-          min = Math.ceil(min)
-          max = Math.floor(max)
-          return Math.floor(Math.random() * (max - min) + min)
-        },
-        convertDecimalNumberToHexNumber(number) {
-          let hex = []
-          let quotient = parseInt(number / 16)
-          let remainder = number % 16
-          hex.push(this.returnHexValue(remainder))
-          hex.unshift(this.returnHexValue(quotient))
-          return hex.toString().replace(',', '')
-        },
-        returnHexValue(number) {
-          switch (number) {
-            case 10:
-              return 'A'
-            case 11:
-              return 'B'
-            case 12:
-              return 'C'
-            case 13:
-              return 'D'
-            case 14:
-              return 'E'
-            case 15:
-              return 'F'
-            default:
-              return number.toString()
-          }
-        },
-        copyRGBAToClipBoard() {
-          this.copyTextFromInput('rgba')
-          this.showMessage()
-        },
-        copyHEXToClipBoard() {
-          this.copyTextFromInput('hex')
-          this.showMessage()
-        },
-        copyTextFromInput(inputId) {
-          const input = document.getElementById(inputId)
-          input.select()
-          document.execCommand('copy')
-        },
-        showMessage() {
-          this.isCopied = true
-          setTimeout(() => {
-            this.isCopied = false
-          }, 2000)
-        },
-      },
-      computed: {
-        colorRGBA() {
-          return `rgba(${this.r}, ${this.g}, ${this.b}, 1)`
-        },
-        colorHEX() {
-          const hexR = this.convertDecimalNumberToHexNumber(this.r)
-          const hexG = this.convertDecimalNumberToHexNumber(this.g)
-          const hexB = this.convertDecimalNumberToHexNumber(this.b)
-          return '#' + hexR + hexG + hexB
-        },
-      },
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://unpkg.com/vue@next"></script>
+  <link rel="stylesheet" href="./style.min.css" />
+  <title>Random Color Generator</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    Vue.createApp(App).mount('#app')
-  </script>
+    html {
+      font-family: 'Monserrat', sans-serif;
+      background: #fff5f5;
+    }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .generator {
+      margin: 2em 0;
+      padding: 2em 3em;
+    }
+
+    .generator,
+    .copy {
+      border-radius: 10px;
+      background-color: transparent;
+      border: 2px #000 solid;
+      box-shadow: #000 1px 2px 4px;
+    }
+
+    .generator:hover,
+    .copy:hover {
+      box-shadow: none;
+    }
+
+    .inputs {
+      display: inherit;
+      flex-direction: column;
+      margin-bottom: 2em;
+    }
+
+    input[type='text'] {
+      height: 2em;
+      text-align: center;
+      margin: 1em 1em;
+    }
+
+    .copy {
+      padding: 1em;
+    }
+
+    .color {
+      height: 20em;
+      width: 20em;
+      border-radius: 50%;
+    }
+
+    .message {
+      margin-top: 1em;
+      font-size: 0.8em;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <button @click="generateRandomColor" class="generator">
+      GENERATE RANDOM COLOR
+    </button>
+
+    <div class="inputs">
+      <div>
+        <input type="text" v-model="colorAsRGBA" id="rgba" readonly />
+        <button @click="copyRGBAToClipBoard" class="copy">COPY</button>
+      </div>
+      <div>
+        <input type="text" v-model="colorAsHEX" id="hex" readonly />
+        <button @click="copyHEXToClipBoard" class="copy">COPY</button>
+      </div>
+    </div>
+
+    <div class="color" :style="{backgroundColor: colorAsRGBA}"></div>
+    <p v-if="isCopied" class="message">Successfully added to clipboard!</p>
+  </div>
+</body>
+<script>
+  const App = {
+    data() {
+      return {
+        r: 0,
+        g: 0,
+        b: 0,
+        rgba: '',
+        message: '',
+        isCopied: false,
+      }
+    },
+    created() { },
+    methods: {
+      generateRandomColor() {
+        this.r = this.generateRandomNumberBetweenTwoValues(0, 256)
+        this.g = this.generateRandomNumberBetweenTwoValues(0, 256)
+        this.b = this.generateRandomNumberBetweenTwoValues(0, 256)
+      },
+      generateRandomNumberBetweenTwoValues(min, max) {
+        min = Math.ceil(min)
+        max = Math.floor(max)
+        return Math.floor(Math.random() * (max - min) + min)
+      },
+      convertDecimalNumberToHexNumber(number) {
+        let hex = []
+        let quotient = parseInt(number / 16)
+        let remainder = number % 16
+        hex.push(this.returnHexValue(remainder))
+        hex.unshift(this.returnHexValue(quotient))
+        return hex.toString().replace(',', '')
+      },
+      returnHexValue(number) {
+        switch (number) {
+          case 10:
+            return 'A'
+          case 11:
+            return 'B'
+          case 12:
+            return 'C'
+          case 13:
+            return 'D'
+          case 14:
+            return 'E'
+          case 15:
+            return 'F'
+          default:
+            return number.toString()
+        }
+      },
+      copyRGBAToClipBoard() {
+        this.copyTextFromInput('rgba')
+        this.showMessage()
+      },
+      copyHEXToClipBoard() {
+        this.copyTextFromInput('hex')
+        this.showMessage()
+      },
+      copyTextFromInput(inputId) {
+        const input = document.getElementById(inputId)
+        navigator.clipboard.writeText(input.value).then(() =>
+          input.blur()
+        )
+      },
+      showMessage() {
+        this.isCopied = true
+        setTimeout(() => {
+          this.isCopied = false
+        }, 2000)
+      },
+    },
+    computed: {
+      colorAsRGBA() {
+        return `rgba(${this.r}, ${this.g}, ${this.b}, 1)`
+      },
+      colorAsHEX() {
+        const hexR = this.convertDecimalNumberToHexNumber(this.r)
+        const hexG = this.convertDecimalNumberToHexNumber(this.g)
+        const hexB = this.convertDecimalNumberToHexNumber(this.b)
+        return '#' + hexR + hexG + hexB
+      },
+    },
+  }
+
+  Vue.createApp(App).mount('#app')
+</script>
+
 </html>
