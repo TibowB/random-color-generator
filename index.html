@@ -108,16 +108,17 @@
         r: 0,
         g: 0,
         b: 0,
-
+        min: 0,
+        max: 256,
         message: '',
         showMessage: false,
       }
     },
     methods: {
       generateRandomColor() {
-        this.r = this.generateRandomNumberBetweenTwoValues(0, 256)
-        this.g = this.generateRandomNumberBetweenTwoValues(0, 256)
-        this.b = this.generateRandomNumberBetweenTwoValues(0, 256)
+        this.r = this.generateRandomNumberBetweenTwoValues(this.min, this.max)
+        this.g = this.generateRandomNumberBetweenTwoValues(this.min, this.max)
+        this.b = this.generateRandomNumberBetweenTwoValues(this.min, this.max)
       },
       generateRandomNumberBetweenTwoValues(min, max) {
         min = Math.ceil(min)
@@ -125,9 +126,9 @@
         return Math.floor(Math.random() * (max - min) + min)
       },
       convertDecimalNumberToHexNumber(number) {
-        let hex = []
-        let quotient = parseInt(number / 16)
-        let remainder = number % 16
+        const hex = []
+        const quotient = parseInt(number / 16)
+        const remainder = number % 16
         hex.push(this.getHexValueFromNumber(remainder))
         hex.unshift(this.getHexValueFromNumber(quotient))
         return hex.toString().replace(',', '')
