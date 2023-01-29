@@ -5,8 +5,6 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <link rel="stylesheet" href="./style.min.css" />
   <title>Random Color Generator</title>
   <style>
     *,
@@ -31,6 +29,7 @@
     .generator {
       margin: 2em 0;
       padding: 2em 3em;
+      cursor: pointer;
     }
 
     .generator,
@@ -52,6 +51,10 @@
       margin-bottom: 2em;
     }
 
+    .inputs button {
+      cursor: pointer;
+    }
+
     input[type='text'] {
       height: 2em;
       text-align: center;
@@ -68,7 +71,7 @@
       border-radius: 50%;
     }
 
-    .message {
+    #message {
       margin-top: 1em;
       font-size: 0.8em;
     }
@@ -93,22 +96,23 @@
     </div>
 
     <div class="color" :style="{backgroundColor: colorAsRGBA}"></div>
-    <p v-if="isCopied" class="message">Successfully added to clipboard!</p>
+    <p v-if="showMessage" id="message">{{ message }}</p>
   </div>
 </body>
-<script>
-  const App = {
+<script type="module">
+  import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+  createApp({
     data() {
       return {
         r: 0,
         g: 0,
         b: 0,
-        rgba: '',
+
         message: '',
-        isCopied: false,
+        showMessage: false,
       }
     },
-    created() { },
     methods: {
       generateRandomColor() {
         this.r = this.generateRandomNumberBetweenTwoValues(0, 256)
@@ -124,11 +128,11 @@
         let hex = []
         let quotient = parseInt(number / 16)
         let remainder = number % 16
-        hex.push(this.returnHexValue(remainder))
-        hex.unshift(this.returnHexValue(quotient))
+        hex.push(this.getHexValueFromNumber(remainder))
+        hex.unshift(this.getHexValueFromNumber(quotient))
         return hex.toString().replace(',', '')
       },
-      returnHexValue(number) {
+      getHexValueFromNumber(number) {
         switch (number) {
           case 10:
             return 'A'
@@ -148,22 +152,22 @@
       },
       copyRGBAToClipBoard() {
         this.copyTextFromInput('rgba')
-        this.showMessage()
+        this.displayMessage()
       },
       copyHEXToClipBoard() {
         this.copyTextFromInput('hex')
-        this.showMessage()
+        this.displayMessage()
       },
       copyTextFromInput(inputId) {
         const input = document.getElementById(inputId)
-        navigator.clipboard.writeText(input.value).then(() =>
-          input.blur()
-        )
+        navigator.clipboard.writeText(input.value)
       },
-      showMessage() {
-        this.isCopied = true
+      displayMessage() {
+        this.showMessage = true
+        this.message = 'Successfully added to clipboard!'
         setTimeout(() => {
-          this.isCopied = false
+          this.showMessage = false
+          this.message = ''
         }, 2000)
       },
     },
@@ -178,9 +182,7 @@
         return '#' + hexR + hexG + hexB
       },
     },
-  }
-
-  Vue.createApp(App).mount('#app')
+  }).mount('#app')
 </script>
 
 </html>
